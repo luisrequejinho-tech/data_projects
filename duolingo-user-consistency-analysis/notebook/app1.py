@@ -1,6 +1,19 @@
 import streamlit as st
 import pandas as pd
+import math
+from pathlib import Path
 import plotly.express as px
+# run on the terminal: pip install plotly
+# run on the terminal: pip install gdown
+# run on the terminal: streamlit run streamlit_app.py
+# the following bash commands are if the csv file is being loaded from github directly (the csv file is too big for that) 
+# git rm --cached data.csv
+# echo "data.csv" >> .gitignore
+# git add .
+# git commit -m "remove data.csv from repo"
+# git push
+
+
 
 # -----------------------------
 # Page Config
@@ -18,14 +31,15 @@ st.caption("Explore trends and patterns in user reviews")
 # -----------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv(
-        r"C:\Users\luisr\OneDrive\Documents\GitHub\data_projects\duolingo-user-consistency-analysis\data\duolingo_reviews_checkpoint.csv",
-        low_memory=False
-    )
+    import gdown
+    file_id = "128cct_W07kKWWszjmfdV0rOeJbkSpVDu"
+    gdown.download(f"https://drive.google.com/uc?id={file_id}", "data.csv", quiet=True)
+    df = pd.read_csv("data.csv", low_memory=False)
     df["at"] = pd.to_datetime(df["at"])
     df["year"] = df["at"].dt.year
     df["month"] = df["at"].dt.month
     return df
+
 
 df = load_data()
 
